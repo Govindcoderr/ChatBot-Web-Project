@@ -102,3 +102,8 @@ async def clear_store():
         return {"status": "success", "message": msg}
     except Exception as e:
         return {"status": "error", "message": f"⚠️ Error: {str(e)}"}
+    
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}

@@ -1,9 +1,28 @@
-fastapi
-uvicorn
-streamlit
-chromadb
-langchain
-bs4
-requests
-sentence-transformers
-langchain-ollama
+# Base Dependencies
+python-multipart==0.0.6
+pydantic==2.4.2
+uvicorn==0.23.2
+fastapi==0.104.0
+
+# Vector Database
+chromadb==0.4.15
+
+# LangChain & LLM
+langchain==0.0.325
+langchain-ollama==0.0.1
+langchain-huggingface==0.0.1
+sentence-transformers==2.2.2
+
+# Web Scraping
+aiohttp==3.8.6
+beautifulsoup4==4.12.2
+requests==2.31.0
+playwright==1.39.0
+async-timeout==4.0.3
+
+# Frontend
+streamlit==1.28.0
+
+# Production Dependencies
+gunicorn==21.2.0
+python-dotenv==1.0.0

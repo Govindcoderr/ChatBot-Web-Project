@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+streamlit
+chromadb
+langchain
+bs4
+requests
+sentence-transformers
+langchain-ollama

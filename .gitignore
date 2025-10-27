@@ -1,0 +1,49 @@
+# ==============================
+# 🚀 Python / FastAPI / Streamlit Project
+# ==============================
+
+# Virtual environments
+.venv/
+env/
+ENV/
+
+# Python cache & compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# VS Code & IDE configs
+.vscode/
+.idea/
+
+# Local environment files
+.env
+*.env
+.env.*
+
+# Logs
+*.log
+logs/
+log/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# PyInstaller build folders
+build/
+dist/
+*.spec
+
+# ChromaDB database
+chroma_db/
+chromadb/
+*.sqlite
+
+# Streamlit cache
+.streamlit/
+.streamlit/secrets.toml
+
+# ==============================
+# ✅ End of File
+# ==============================

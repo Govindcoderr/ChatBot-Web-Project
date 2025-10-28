@@ -1,7 +1,7 @@
-# Use Python base image
+# Use a lightweight Python base image
 FROM python:3.10-slim
 
-# Install dependencies for Ollama, Streamlit, and Supervisor
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl wget supervisor \
     && rm -rf /var/lib/apt/lists/*
@@ -12,21 +12,21 @@ RUN curl -fsSL https://ollama.com/install.sh | sh
 # Set working directory
 WORKDIR /app
 
-# ✅ Copy only backend requirements first
-COPY backend/requirements.txt ./backend/requirements.txt
+# ✅ Copy only backend requirements file first
+COPY backend/requirements.txt /app/backend/requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r backend/requirements.txt
+# Install Python dependencies from backend requirements.txt
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt
 
-# ✅ Now copy everything else
+# ✅ Copy the entire project
 COPY . .
 
-# Expose backend (8000) and frontend (8501)
+# Expose backend and frontend ports
 EXPOSE 8000
 EXPOSE 8501
 
-# Copy Supervisor config
+# Copy Supervisor config file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Start Ollama server, backend, and Streamlit together
+# ✅ Start Ollama server + pull model + run backend + frontend
 CMD bash -c "ollama serve & sleep 5 && ollama pull llama3.2:1b && /usr/bin/supervisord"

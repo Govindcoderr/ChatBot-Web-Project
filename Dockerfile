@@ -12,11 +12,14 @@ RUN curl -fsSL https://ollama.com/install.sh | sh
 # Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . /app
+# ✅ Copy only backend requirements first
+COPY backend/requirements.txt ./backend/requirements.txt
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r backend/requirements.txt
+
+# ✅ Now copy everything else
+COPY . .
 
 # Expose backend (8000) and frontend (8501)
 EXPOSE 8000
@@ -25,5 +28,5 @@ EXPOSE 8501
 # Copy Supervisor config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Start Ollama server + backend + frontend together
+# Start Ollama server, backend, and Streamlit together
 CMD bash -c "ollama serve & sleep 5 && ollama pull llama3.2:1b && /usr/bin/supervisord"

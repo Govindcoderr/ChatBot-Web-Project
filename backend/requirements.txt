@@ -1,26 +1,12 @@
-# --- Core Backend ---
 fastapi
-uvicorn[standard]
+uvicorn
 requests
-pydantic
-asyncio
-aiohttp
-
-# --- Frontend ---
 streamlit
-
-# --- LangChain & AI ---
+chromadb
 langchain
 langchain-ollama
 langchain-huggingface
-chromadb
 sentence-transformers
-
-# --- Utilities ---
 beautifulsoup4
-tqdm
-regex
-
-# --- Optional ---
-gunicorn
-supervisor
+aiohttp
+pydantic

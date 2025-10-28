@@ -1,39 +1,30 @@
-# Base image with Python 3.10.11
-FROM python:3.10.11-slim
+# Base image
+FROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies and cleanup
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Install system dependencies (needed for some ML + sentence-transformers)
+RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
 
-# Install playwright dependencies
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g playwright \
-    && playwright install chromium
+# Install Ollama (if deploying on your own server or Render with Docker)
+RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Copy requirements first for better caching
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Copy project files
+COPY . /app
 
-# Copy backend code
-COPY backend/ ./backend/
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Create necessary directories
-RUN mkdir -p backend/data/vector_store
+# Pull your model (llama3.2:1b)
+RUN ollama pull llama3.2:1b
 
-# Set environment variables
-ENV PYTHONPATH=/app
-ENV PYTHONUNBUFFERED=1
-
-# Expose port
+# Expose ports for FastAPI (8000) and Streamlit (8501)
 EXPOSE 8000
+EXPOSE 8501
 
-# Start FastAPI server
-CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Copy supervisord config
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Start Ollama + both services
+CMD ollama serve & supervisord -c /etc/supervisor/conf.d/supervisord.conf
